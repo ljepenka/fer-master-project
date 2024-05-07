@@ -115,7 +115,6 @@ const Navbar = () => {
                     {dashboardsError && (
                       <RepeatAction boxSx={{ padding: appTheme.spacing(1) }} onClick={initDashboards} />
                     )}
-
                     {dashboards && (
                       <List>
                         {Array.from(dashboards.entries()).map(([id, dashboard]) => (
@@ -123,7 +122,7 @@ const Navbar = () => {
                             key={id}
                             onClick={() => {
                               closeNavbar();
-                              navigate(`/dashboards/${dashboard.name}`);
+                              navigate(`/dashboards/${id}`);
                             }}
                             underline="none"
                           >

@@ -1,4 +1,10 @@
-import { Container, CssBaseline, ThemeProvider, createTheme, responsiveFontSizes } from "@mui/material";
+import {
+  Container,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  responsiveFontSizes,
+} from "@mui/material";
 import { orange } from "@mui/material/colors";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
@@ -23,7 +29,13 @@ export const appTheme = responsiveFontSizes(
   })
 );
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -60,7 +72,11 @@ function App() {
                       user ? (
                         <Profile />
                       ) : (
-                        <Unauthorized redirectTo={"/login"} redirectionPage={"Login"} message={"Permission denied"} />
+                        <Unauthorized
+                          redirectTo={"/login"}
+                          redirectionPage={"Login"}
+                          message={"Permission denied"}
+                        />
                       )
                     }
                   />
@@ -71,22 +87,33 @@ function App() {
                         user ? (
                           <Dashboards />
                         ) : (
-                          <Unauthorized redirectTo={"/login"} redirectionPage={"Login"} message={"Permission denied"} />
+                          <Unauthorized
+                            redirectTo={"/login"}
+                            redirectionPage={"Login"}
+                            message={"Permission denied"}
+                          />
                         )
                       }
                     />
                     <Route
-                      path=":dashboardName"
+                      path=":dashboardId"
                       Component={() =>
                         user ? (
                           <Dashboard />
                         ) : (
-                          <Unauthorized redirectTo={"/login"} redirectionPage={"Login"} message={"Permission denied"} />
+                          <Unauthorized
+                            redirectTo={"/login"}
+                            redirectionPage={"Login"}
+                            message={"Permission denied"}
+                          />
                         )
                       }
                     />
                   </Route>
-                  <Route path="/unauthorized" Component={() => <Unauthorized />} />
+                  <Route
+                    path="/unauthorized"
+                    Component={() => <Unauthorized />}
+                  />
                   <Route path="*" Component={() => <Unauthorized />} />
                 </Routes>
               </Container>

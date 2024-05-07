@@ -33,6 +33,8 @@ export const useDashboardStore = create((set, get) => ({
       set((state) => {
         return { dashboards: createDashboardsMap([result.data.result], state.dashboards) };
       });
+
+      return result;
     } catch (error) {
       throw error;
     } finally {

@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use("/auth", authRoutes);
 app.use("/dashboards", dashboardRoutes);
+app.use("/dashboards/devices", dashboardRoutes);
 app.use("/users", userRoutes);
 
 const DB_CONNECTION_URL = process.env.DB_CONNECTION_URL || "";

@@ -1,12 +1,10 @@
 import { LoadingButton } from "@mui/lab";
-import { DialogActions, DialogContent, TextField } from "@mui/material";
+import { Button, DialogActions, DialogContent, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import * as Yup from "yup";
-import useDashboardStore from "../../zustand/dashboardStore";
-import useNavbarStore from "../../zustand/navbarStore";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -24,42 +22,40 @@ const validationSchema = Yup.object({
       )
     )
     .required("Required"),
+  params: Yup.string()
+    .required("Required")
+    .test("is-json", "Can't convert to JSON object", (value) => {
+      try {
+        const parsedValue = JSON.parse(value);
+        if (parsedValue) return true;
+      } catch (error) {
+        return false;
+      }
+    }),
 });
 
-const initialDashboardData = {
+const initialDeviceData = {
   name: "",
   address: "",
   socket: "",
+  params: "",
 };
 
-const AddEditDashboardModal = ({ dialogClose, data }) => {
+const AddEditDeviceModal = ({ dialogClose, data }) => {
   const navigate = useNavigate();
-  const { createDashboard, editDashboard } = useDashboardStore();
-  const { closeNavbar } = useNavbarStore();
+  // device store
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
-    initialValues: data ?? initialDashboardData,
+    initialValues: data ?? initialDeviceData,
     validationSchema: validationSchema,
     validateOnBlur: true,
     onSubmit: async (values) => {
       setLoading(() => true);
       if (data) {
-        await editDashboard(values)
-          .then(() => {
-            dialogClose();
-            closeNavbar();
-            data.refetch();
-          })
-          .catch(() => {});
+        // edit device
       } else {
-        await createDashboard(values)
-          .then((values) => {
-            dialogClose();
-            closeNavbar();
-            data.refetch(values.data.result._id);
-          })
-          .catch(() => {});
+        // create device
       }
 
       setLoading(() => false);
@@ -76,7 +72,7 @@ const AddEditDashboardModal = ({ dialogClose, data }) => {
             required
             fullWidth
             id="name"
-            label="Dashboard Name"
+            label="Device Name"
             name="name"
             autoFocus
             value={formik.values.name}
@@ -113,6 +109,36 @@ const AddEditDashboardModal = ({ dialogClose, data }) => {
             error={formik.touched.socket && Boolean(formik.errors.socket)}
             helperText={formik.touched.socket && formik.errors.socket}
           />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            multiline
+            minRows={3}
+            maxRows={8}
+            fullWidth
+            id="params"
+            name="params"
+            label="Device params"
+            value={formik.values.params}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.params && Boolean(formik.errors.params)}
+            helperText={formik.touched.params && formik.errors.params}
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            color="primary"
+            onClick={() =>
+              formik.setFieldValue(
+                "params",
+                JSON.stringify({ test: 1 }, null, 4)
+              )
+            }
+          >
+            Format
+          </Button>
         </form>
       </DialogContent>
       <DialogActions>
@@ -139,4 +165,4 @@ const AddEditDashboardModal = ({ dialogClose, data }) => {
   );
 };
 
-export default AddEditDashboardModal;
+export default AddEditDeviceModal;

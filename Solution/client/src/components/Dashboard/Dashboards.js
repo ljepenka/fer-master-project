@@ -72,7 +72,7 @@ const Dashboards = () => {
               >
                 <Box sx={{ flex: 1 }}>
                   <Link
-                    onClick={() => navigate(`/dashboards/${dashboard.name}`)}
+                    onClick={() => navigate(`/dashboards/${id}`)}
                     variant="h5"
                     underline="none"
                     sx={{ cursor: "pointer", fontWeight: "bold" }}

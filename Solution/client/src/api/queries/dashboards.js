@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDashboard } from "../endpoints/dashboard";
 
-export const useGetDashboardByIdQuery = (dashboardName) => {
+export const useGetDashboardByIdQuery = (dashboardId) => {
   return useQuery({
-    queryKey: ["dashboards", dashboardName],
-    queryFn: () => getDashboard(dashboardName),
-    enabled: Boolean(dashboardName),
+    queryKey: ["dashboards", dashboardId],
+    queryFn: () => getDashboard(dashboardId),
+    enabled: Boolean(dashboardId),
     retry: false,
   });
 };
