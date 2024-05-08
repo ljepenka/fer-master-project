@@ -2,7 +2,6 @@ import { LoadingButton } from "@mui/lab";
 import { DialogActions, DialogContent, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import * as Yup from "yup";
 import useDashboardStore from "../../zustand/dashboardStore";
@@ -33,7 +32,6 @@ const initialDashboardData = {
 };
 
 const AddEditDashboardModal = ({ dialogClose, data }) => {
-  const navigate = useNavigate();
   const { createDashboard, editDashboard } = useDashboardStore();
   const { closeNavbar } = useNavbarStore();
   const [loading, setLoading] = useState(false);

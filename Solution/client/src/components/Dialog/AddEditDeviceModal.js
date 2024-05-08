@@ -2,9 +2,9 @@ import { LoadingButton } from "@mui/lab";
 import { Button, DialogActions, DialogContent, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import * as Yup from "yup";
+import useDeviceStore from "../../zustand/deviceStore";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -42,20 +42,32 @@ const initialDeviceData = {
 };
 
 const AddEditDeviceModal = ({ dialogClose, data }) => {
-  const navigate = useNavigate();
-  // device store
+  const { createDevice, editDevice } = useDeviceStore();
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
-    initialValues: data ?? initialDeviceData,
+    initialValues: data.data ?? {
+      ...initialDeviceData,
+      dashboard: data.dashboard,
+    },
     validationSchema: validationSchema,
     validateOnBlur: true,
     onSubmit: async (values) => {
       setLoading(() => true);
-      if (data) {
-        // edit device
+      if (data.data) {
+        await editDevice(data.dashboard, values)
+          .then(() => {
+            dialogClose();
+            data.refetch();
+          })
+          .catch(() => {});
       } else {
-        // create device
+        await createDevice(data.dashboard, values)
+          .then((values) => {
+            dialogClose();
+            data.refetch(values.data.result._id);
+          })
+          .catch(() => {});
       }
 
       setLoading(() => false);

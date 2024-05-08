@@ -36,7 +36,7 @@ const createEditDeviceValidationSchema = Yup.object({
 export const getDevices = async (req, res) => {
   try {
     const userId = req.userId;
-    const dashboardId = req.params.id;
+    const dashboardId = req.params.dashboardId;
 
     const data = await Device.find(
       { owner: userId, dashboard: dashboardId },
@@ -54,8 +54,8 @@ export const createDevice = async (req, res) => {
   try {
     const { name, address, socket, params } = req.body;
     const userId = req.userId;
-    const dashboardId = req.params.id;
-
+    const dashboardId = req.params.dashboardId;
+    console.log(dashboardId)
     createEditDeviceValidationSchema
       .validate({ name, address, socket, params })
       .then(async (validationData) => {
@@ -75,7 +75,7 @@ export const createDevice = async (req, res) => {
           address: validationData.address,
           socket: validationData.socket,
           dashboard: dashboardId,
-          params: validationData.params,
+          params: JSON.stringify(JSON.parse(validationData.params)),
           owner: userId,
         });
 
@@ -102,7 +102,7 @@ export const editDevice = async (req, res) => {
   try {
     const { _id, name, address, socket, params } = req.body;
     const userId = req.userId;
-    const dashboardId = req.params.id;
+    const dashboardId = req.params.dashboardId;
 
     createEditDeviceValidationSchema
       .validate({ name, address, socket, params })
@@ -130,7 +130,9 @@ export const editDevice = async (req, res) => {
         existingDevice.name = validationData.name;
         existingDevice.address = validationData.address;
         existingDevice.socket = validationData.socket;
-        existingDevice.params = validationData.params;
+        existingDevice.params = JSON.stringify(
+          JSON.parse(validationData.params)
+        );
 
         await Device.findByIdAndUpdate(_id, {
           name: existingDevice.name,

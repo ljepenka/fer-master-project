@@ -22,7 +22,7 @@ router.post("/", auth, createDashboard);
 router.put("/:id", auth, editDashboard);
 router.delete("/:id", auth, deleteDashboard);
 router.get("/:dashboardId/devices", auth, getDevices);
-router.post("/:dashboardId/devices/:id", auth, createDevice);
+router.post("/:dashboardId/devices", auth, createDevice);
 router.put("/:dashboardId/devices/:id", auth, editDevice);
 router.delete("/:dashboardId/devices/:id", auth, deleteDevice);
 

@@ -85,7 +85,7 @@ const Dashboard = () => {
               titleSx={{ fontWeight: "bold" }}
               fullWidth={true}
             >
-              <AddEditDeviceModal />
+              <AddEditDeviceModal data={{ dashboard: dashboardId }} />
             </DialogButton>
           </Box>
         </Box>
