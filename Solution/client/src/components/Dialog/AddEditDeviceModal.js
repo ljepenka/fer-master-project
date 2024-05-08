@@ -130,12 +130,14 @@ const AddEditDeviceModal = ({ dialogClose, data }) => {
             variant="contained"
             fullWidth
             color="primary"
-            onClick={() =>
-              formik.setFieldValue(
-                "params",
-                JSON.stringify({ test: 1 }, null, 4)
-              )
-            }
+            onClick={() => {
+              try {
+                formik.setFieldValue(
+                  "params",
+                  JSON.stringify(JSON.parse(formik.values.params), null, 4)
+                );
+              } catch (error) {}
+            }}
           >
             Format
           </Button>
