@@ -37,7 +37,7 @@ const AddEditDashboardModal = ({ dialogClose, data }) => {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
-    initialValues: data ?? initialDashboardData,
+    initialValues: data.data ?? initialDashboardData,
     validationSchema: validationSchema,
     validateOnBlur: true,
     onSubmit: async (values) => {

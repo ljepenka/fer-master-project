@@ -14,11 +14,18 @@ import AddEditDashboardModal from "../Dialog/AddEditDashboardModal";
 import DialogButton from "../Dialog/DialogButton";
 import RepeatAction from "../RepeatAction/RepeatAction";
 import AddEditDeviceModal from "../Dialog/AddEditDeviceModal";
+import { useGetDashboardDevicesQuery } from "../../api/queries/devices";
 
 const Dashboard = () => {
   const { dashboardId } = useParams();
   const { data, error, isFetching, refetch } =
     useGetDashboardByIdQuery(dashboardId);
+  const {
+    data: devicesData,
+    error: devicesError,
+    isFetching: isFetchingDevices,
+    refetch: deviceRefetch,
+  } = useGetDashboardDevicesQuery(dashboardId);
 
   useEffect(() => {
     refetch();
@@ -69,7 +76,7 @@ const Dashboard = () => {
                 fullWidth={true}
               >
                 <AddEditDashboardModal
-                  data={{ ...data.data.result, refetch }}
+                  data={{ data: data.data.result, refetch }}
                 />
               </DialogButton>
             )}
@@ -85,7 +92,12 @@ const Dashboard = () => {
               titleSx={{ fontWeight: "bold" }}
               fullWidth={true}
             >
-              <AddEditDeviceModal data={{ dashboard: dashboardId }} />
+              <AddEditDeviceModal
+                data={{
+                  refetch: deviceRefetch,
+                  dashboard: dashboardId,
+                }}
+              />
             </DialogButton>
           </Box>
         </Box>
