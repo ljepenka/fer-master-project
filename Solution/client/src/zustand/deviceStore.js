@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import {
-    createDevice,
-    deleteDevice,
-    editDevice,
-    getDevices,
+  createDevice,
+  deleteDevice,
+  editDevice,
+  getDevices,
 } from "../api/endpoints/device";
 
-const fetchDevicesMap = async () => {
+const fetchDevicesMap = async (dashboardId) => {
   try {
-    const result = await getDevices();
+    const result = await getDevices(dashboardId);
     return createDevicesMap(result.data.result, new Map());
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ const createDevicesMap = (data, state) => {
 };
 
 export const useDeviceStore = create((set, get) => ({
-  devices: null,
+  devices: new Map(),
   device: null,
   devicesError: false,
   devicesLoading: true,
@@ -48,10 +48,10 @@ export const useDeviceStore = create((set, get) => ({
       set({ devicesLoading: false });
     }
   },
-  initDevices: async () => {
+  initDevices: async (dashboardId) => {
     try {
       set({ devicesLoading: true });
-      const result = await fetchDevicesMap();
+      const result = await fetchDevicesMap(dashboardId);
       set({ devicesError: false, devices: result, device: null });
     } catch (error) {
       set({ devicesError: true, devices: null, device: null });

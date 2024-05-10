@@ -58,14 +58,12 @@ const AddEditDeviceModal = ({ dialogClose, data }) => {
         await editDevice(data.dashboard, values)
           .then(() => {
             dialogClose();
-            data.refetch();
           })
           .catch(() => {});
       } else {
         await createDevice(data.dashboard, values)
           .then((values) => {
             dialogClose();
-            data.refetch(values.data.result._id);
           })
           .catch(() => {});
       }

@@ -43,7 +43,18 @@ export const getDevices = async (req, res) => {
       { _id: 1, name: 1, address: 1, socket: 1, dashboard: 1, params: 1 }
     );
 
-    return res.status(200).json({ result: data });
+    const convertedParamsData = data.map((device) => {
+      return {
+        _id: device._id,
+        name: device.name,
+        socket: device.socket,
+        address: device.address,
+        dashboard: device.dashboard,
+        params: JSON.parse(device.params),
+      };
+    });
+
+    return res.status(200).json({ result: convertedParamsData });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Something went wrong" });
@@ -55,7 +66,7 @@ export const createDevice = async (req, res) => {
     const { name, address, socket, params } = req.body;
     const userId = req.userId;
     const dashboardId = req.params.dashboardId;
-    console.log(dashboardId)
+    console.log(dashboardId);
     createEditDeviceValidationSchema
       .validate({ name, address, socket, params })
       .then(async (validationData) => {

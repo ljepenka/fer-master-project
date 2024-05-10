@@ -10,7 +10,13 @@ import ProgressOrDivider from "../ProgressOrDivider/ProgressOrDivider";
 import RepeatAction from "../RepeatAction/RepeatAction";
 
 const Dashboards = () => {
-  const { dashboards, dashboardsError, dashboardsLoading, deleteDashboard, initDashboards } = useDashboardStore();
+  const {
+    dashboards,
+    dashboardsError,
+    dashboardsLoading,
+    deleteDashboard,
+    initDashboards,
+  } = useDashboardStore();
   const navigate = useNavigate();
 
   return (
@@ -34,10 +40,24 @@ const Dashboards = () => {
             flexWrap: "wrap",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
             <Typography variant="h3">Dashboards</Typography>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
             <DialogButton
               buttonSx={{
                 sx: { height: "fit-content" },
@@ -55,9 +75,16 @@ const Dashboards = () => {
           </Box>
         </Box>
         <ProgressOrDivider progress={dashboardsLoading} />
-        {!dashboardsLoading && dashboardsError && <RepeatAction onClick={initDashboards} />}
-        {dashboards && (
-          <Stack direction="column" justifyContent="center" alignItems="stretch" spacing={2}>
+        {!dashboardsLoading && dashboardsError && (
+          <RepeatAction onClick={initDashboards} />
+        )}
+        {dashboards.size !== 0 && (
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="stretch"
+            spacing={2}
+          >
             {Array.from(dashboards.entries()).map(([id, dashboard]) => (
               <Paper
                 key={id}
@@ -107,7 +134,11 @@ const Dashboards = () => {
                   }}
                 >
                   <DialogButton
-                    buttonSx={{ sx: { height: "fit-content" }, variant: "contained", children: <Edit /> }}
+                    buttonSx={{
+                      sx: { height: "fit-content" },
+                      variant: "contained",
+                      children: <Edit />,
+                    }}
                     title="Edit dashboard"
                     titleSx={{ fontWeight: "bold" }}
                     iconButton={true}
@@ -131,7 +162,10 @@ const Dashboards = () => {
                       text={
                         <Typography variant="p">
                           Are you sure you want to delete dashboard{" "}
-                          <Typography variant="span" sx={{ fontWeight: "bold" }}>
+                          <Typography
+                            variant="span"
+                            sx={{ fontWeight: "bold" }}
+                          >
                             {dashboard.name}
                           </Typography>
                           ?

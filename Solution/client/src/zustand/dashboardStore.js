@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { createDashboard, deleteDashboard, editDashboard, getDashboards } from "../api/endpoints/dashboard";
+import {
+  createDashboard,
+  deleteDashboard,
+  editDashboard,
+  getDashboards,
+} from "../api/endpoints/dashboard";
 
 const fetchDashboardsMap = async () => {
   try {
@@ -22,7 +27,7 @@ const createDashboardsMap = (data, state) => {
 };
 
 export const useDashboardStore = create((set, get) => ({
-  dashboards: null,
+  dashboards: new Map(),
   dashboard: null,
   dashboardsError: false,
   dashboardsLoading: true,
@@ -31,7 +36,12 @@ export const useDashboardStore = create((set, get) => ({
       set({ dashboardsLoading: true });
       const result = await createDashboard(values);
       set((state) => {
-        return { dashboards: createDashboardsMap([result.data.result], state.dashboards) };
+        return {
+          dashboards: createDashboardsMap(
+            [result.data.result],
+            state.dashboards
+          ),
+        };
       });
 
       return result;

@@ -1,34 +1,35 @@
 import { Add, Edit } from "@mui/icons-material";
-import {
-  Box,
-  Container,
-  Divider,
-  LinearProgress,
-  Typography,
-} from "@mui/material";
-import { useEffect } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { appTheme } from "../../App";
 import { useGetDashboardByIdQuery } from "../../api/queries/dashboards";
+import useDeviceStore from "../../zustand/deviceStore";
 import AddEditDashboardModal from "../Dialog/AddEditDashboardModal";
-import DialogButton from "../Dialog/DialogButton";
-import RepeatAction from "../RepeatAction/RepeatAction";
 import AddEditDeviceModal from "../Dialog/AddEditDeviceModal";
-import { useGetDashboardDevicesQuery } from "../../api/queries/devices";
+import DialogButton from "../Dialog/DialogButton";
+import ProgressOrDivider from "../ProgressOrDivider/ProgressOrDivider";
+import RepeatAction from "../RepeatAction/RepeatAction";
 
 const Dashboard = () => {
   const { dashboardId } = useParams();
-  const { data, error, isFetching, refetch } =
-    useGetDashboardByIdQuery(dashboardId);
-  const {
-    data: devicesData,
-    error: devicesError,
-    isFetching: isFetchingDevices,
-    refetch: deviceRefetch,
-  } = useGetDashboardDevicesQuery(dashboardId);
+  // use either store or query
+  const { data, isFetching, refetch } = useGetDashboardByIdQuery(dashboardId);
+  // initDevices will be triggered on new device
+  // const { refetch: deviceRefetch } = useGetDashboardDevicesQuery(dashboardId);
+  const { devices, devicesError, devicesLoading, initDevices } =
+    useDeviceStore();
+
+  const fetchDevices = useCallback(
+    async (dashboardId) => {
+      await initDevices(dashboardId);
+    },
+    [initDevices]
+  );
 
   useEffect(() => {
     refetch();
+    fetchDevices(dashboardId);
   }, [dashboardId, refetch]);
 
   return (
@@ -94,23 +95,25 @@ const Dashboard = () => {
             >
               <AddEditDeviceModal
                 data={{
-                  refetch: deviceRefetch,
                   dashboard: dashboardId,
                 }}
               />
             </DialogButton>
           </Box>
         </Box>
-        {!isFetching ? (
-          <>
-            <Divider />
-            {error && <RepeatAction onClick={refetch} />}
-          </>
-        ) : (
-          <Box>
-            <LinearProgress color="secondary" />
-          </Box>
+        <ProgressOrDivider progress={isFetching} />
+        {!devicesLoading && devicesError && (
+          <RepeatAction onClick={() => fetchDevices(dashboardId)} />
         )}
+        {devices.size !== 0 &&
+          Array.from(devices.entries()).map(([id, device]) => (
+            <Box key={id}>
+              <Typography>{device.name}</Typography>
+              <Typography>{device.dashboard}</Typography>
+              <Typography>{device.owner}</Typography>
+              <Typography>{JSON.stringify(device.params)}</Typography>
+            </Box>
+          ))}
       </Box>
     </Container>
   );
