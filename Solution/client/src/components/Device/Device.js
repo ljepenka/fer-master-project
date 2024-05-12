@@ -6,6 +6,7 @@ import { appTheme } from "../../App";
 
 const Device = ({ device }) => {
   const params = device.params;
+  console.log(device.socket);
   const socket = useMemo(() => new WebSocket(device.socket), [device.socket]);
   const [value, setValue] = useState({ value: null });
 
@@ -73,16 +74,22 @@ const Device = ({ device }) => {
         );
       case 2:
         return (
-          <Slider
-            sx={{ width: 300 }}
-            spacing={1}
-            marks={params.marks}
-            min={params.min}
-            max={params.max}
-            step={10}
-            valueLabelDisplay="auto"
-            onChangeCommitted={(e) => act(e.target.value)}
-          />
+          <Box>
+            <Slider
+              sx={{ width: 300 }}
+              spacing={1}
+              marks={params.marks}
+              min={params.min}
+              max={params.max}
+              step={10}
+              valueLabelDisplay="auto"
+              onChangeCommitted={(e) => act(e.target.value)}
+            />
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography>{params.min}</Typography>
+              <Typography>{params.max}</Typography>
+            </Box>
+          </Box>
         );
       case 3:
         return (
@@ -128,7 +135,7 @@ const Device = ({ device }) => {
           >
             <Typography variant="h5">{device.name}</Typography>
           </Box>
-          <Box>{setDevice(params)}</Box>
+          {setDevice(params)}
         </Paper>
       </Grid>
     );
