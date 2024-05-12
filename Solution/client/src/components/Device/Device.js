@@ -27,6 +27,7 @@ const Device = ({ device }) => {
   };
 
   const act = (value) => {
+    console.log(value);
     if (socket && socket.readyState === WebSocket.OPEN) sendValue(value);
   };
 
@@ -82,7 +83,7 @@ const Device = ({ device }) => {
               max={params.max}
               step={10}
               valueLabelDisplay="auto"
-              onChangeCommitted={(e) => act(e.target.value)}
+              onChangeCommitted={(e, value) => act(value)}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography>{params.min}</Typography>
