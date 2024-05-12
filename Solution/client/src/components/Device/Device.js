@@ -8,27 +8,31 @@ const Device = ({ device }) => {
   const params = device.params;
   const socket = useMemo(() => new WebSocket(device.socket), [device.socket]);
   const [value, setValue] = useState({ value: null });
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    socket.onopen = () => {};
+    socket.onopen = () => {
+      socket.send(JSON.stringify({ initial: 1 }));
+      setIsReady(true);
+    };
 
     socket.onmessage = (event) => {
-      setValue(JSON.parse(event.data));
+      console.log(event.data);
+      setValue(() => JSON.parse(event.data));
+    };
+
+    socket.onerror = () => {
+      setIsReady(false);
     };
 
     return () => {
+      setIsReady(false);
       socket.close();
     };
   }, [socket]);
 
-  const sendValue = (value) => {
-    socket.send(JSON.stringify({ value }));
-    setValue({ value });
-  };
-
   const act = (value) => {
-    console.log(value);
-    if (socket && socket.readyState === WebSocket.OPEN) sendValue(value);
+    socket.send(JSON.stringify({ value }));
   };
 
   useEffect(() => {
@@ -68,6 +72,7 @@ const Device = ({ device }) => {
             <Switch
               checked={value.value}
               onChange={(e) => act(e.target.checked)}
+              disabled={!isReady}
             />
             <Typography>{params.rightLabel}</Typography>
           </Stack>
@@ -83,7 +88,9 @@ const Device = ({ device }) => {
               max={params.max}
               step={10}
               valueLabelDisplay="auto"
+              value={value.value}
               onChangeCommitted={(e, value) => act(value)}
+              disabled={!isReady}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography>{params.min}</Typography>
@@ -93,7 +100,7 @@ const Device = ({ device }) => {
         );
       case 3:
         return (
-          <Stack direction="column" spacing={1} alignItems="center">
+          <Box>
             <Gauge
               width={250}
               height={150}
@@ -102,46 +109,55 @@ const Device = ({ device }) => {
               endAngle={90}
               valueMin={params.valueMin}
               valueMax={params.valueMax}
+              disabled={!isReady}
             />
-            <Typography>[{params.unit}]</Typography>
-          </Stack>
+            <Box sx={{ display: "flex" }}>
+              <Typography sx={{ flex: 1, textAlign: "start" }}>
+                {params.valueMin}
+              </Typography>
+              <Typography>[{params.unit}]</Typography>
+              <Typography sx={{ flex: 1, textAlign: "end" }}>
+                {params.valueMax}
+              </Typography>
+            </Box>
+          </Box>
         );
       default:
         return <></>;
     }
   };
 
-  if (value.value !== null) {
-    return (
-      <Grid>
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            width: "100%",
-            padding: appTheme.spacing(2),
-            gap: appTheme.spacing(2),
-          }}
-        >
-          <Box
+  return (
+    <>
+      {value.value !== null && isReady && (
+        <Grid>
+          <Paper
             sx={{
               display: "flex",
+              flexDirection: "column",
               justifyContent: "space-between",
               width: "100%",
-              padding: appTheme.spacing(1),
-              gap: appTheme.spacing(1),
+              padding: appTheme.spacing(2),
+              gap: appTheme.spacing(2),
             }}
           >
-            <Typography variant="h5">{device.name}</Typography>
-          </Box>
-          {setDevice(params)}
-        </Paper>
-      </Grid>
-    );
-  } else {
-    return <></>;
-  }
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: appTheme.spacing(1),
+                gap: appTheme.spacing(1),
+              }}
+            >
+              <Typography variant="h5">{device.name}</Typography>
+            </Box>
+            {setDevice(params)}
+          </Paper>
+        </Grid>
+      )}
+    </>
+  );
 };
 
 export default Device;
