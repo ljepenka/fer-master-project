@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
     .required("Required"),
   socket: Yup.string()
     .test("is-socket", "Not a valid URL", (value) =>
-      /^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[a-zA-Z]+):([0-9]{1,5})$/.test(
+      /^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[a-zA-Z]+):([0-9]{1,5})(\/[a-zA-Z0-9]+)?$/.test(
         value
       )
     )
@@ -46,7 +46,7 @@ const AddEditDeviceModal = ({ dialogClose, data }) => {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
-    initialValues: data.data ?? {
+    initialValues: data?.data ?? {
       ...initialDeviceData,
       dashboard: data.dashboard,
     },

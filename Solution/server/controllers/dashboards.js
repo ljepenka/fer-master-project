@@ -17,7 +17,7 @@ const createEditDashboardValidationSchema = Yup.object({
     .required("Address URL required"),
   socket: Yup.string()
     .test("is-socket", "Not a valid URL", (value) =>
-      /^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[a-zA-Z]+):([0-9]{1,5})$/.test(
+      /^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[a-zA-Z]+):([0-9]{1,5})(\/[a-zA-Z0-9]+)?$/.test(
         value
       )
     )

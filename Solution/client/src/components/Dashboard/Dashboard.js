@@ -1,5 +1,6 @@
 import { Add, Edit } from "@mui/icons-material";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Paper, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import { useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { appTheme } from "../../App";
@@ -105,15 +106,26 @@ const Dashboard = () => {
         {!devicesLoading && devicesError && (
           <RepeatAction onClick={() => fetchDevices(dashboardId)} />
         )}
-        {devices.size !== 0 &&
-          Array.from(devices.entries()).map(([id, device]) => (
-            <Box key={id}>
-              <Typography>{device.name}</Typography>
-              <Typography>{device.dashboard}</Typography>
-              <Typography>{device.owner}</Typography>
-              <Typography>{JSON.stringify(device.params)}</Typography>
-            </Box>
-          ))}
+        {devices.size !== 0 && (
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid
+              container
+              spacing={{ md: 4 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              {Array.from(devices.entries()).map(([id, device]) => (
+                <Grid key={id}>
+                  <Paper>
+                    <Typography>{device.name}</Typography>
+                    <Typography>{device.dashboard}</Typography>
+                    <Typography>{device.owner}</Typography>
+                    <Typography>{JSON.stringify(device.params)}</Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        )}
       </Box>
     </Container>
   );
