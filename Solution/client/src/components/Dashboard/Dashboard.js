@@ -1,11 +1,12 @@
 import { Add, Edit } from "@mui/icons-material";
-import { Box, Container, Paper, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { appTheme } from "../../App";
 import { useGetDashboardByIdQuery } from "../../api/queries/dashboards";
 import useDeviceStore from "../../zustand/deviceStore";
+import Device from "../Device/Device";
 import AddEditDashboardModal from "../Dialog/AddEditDashboardModal";
 import AddEditDeviceModal from "../Dialog/AddEditDeviceModal";
 import DialogButton from "../Dialog/DialogButton";
@@ -31,7 +32,7 @@ const Dashboard = () => {
   useEffect(() => {
     refetch();
     fetchDevices(dashboardId);
-  }, [dashboardId, refetch]);
+  }, [dashboardId, refetch, fetchDevices]);
 
   return (
     <Container sx={{ padding: appTheme.spacing(2) }}>
@@ -109,19 +110,13 @@ const Dashboard = () => {
         {devices.size !== 0 && (
           <Box sx={{ flexGrow: 1 }}>
             <Grid
+              sx={{ justifyContent: "space-around" }}
               container
               spacing={{ md: 4 }}
               columns={{ xs: 4, sm: 8, md: 12 }}
             >
               {Array.from(devices.entries()).map(([id, device]) => (
-                <Grid key={id}>
-                  <Paper>
-                    <Typography>{device.name}</Typography>
-                    <Typography>{device.dashboard}</Typography>
-                    <Typography>{device.owner}</Typography>
-                    <Typography>{JSON.stringify(device.params)}</Typography>
-                  </Paper>
-                </Grid>
+                <Device key={id} device={device}></Device>
               ))}
             </Grid>
           </Box>

@@ -66,7 +66,7 @@ export const createDevice = async (req, res) => {
     const { name, address, socket, params } = req.body;
     const userId = req.userId;
     const dashboardId = req.params.dashboardId;
-    
+
     createEditDeviceValidationSchema
       .validate({ name, address, socket, params })
       .then(async (validationData) => {
@@ -111,9 +111,12 @@ export const createDevice = async (req, res) => {
 
 export const editDevice = async (req, res) => {
   try {
-    const { _id, name, address, socket, params } = req.body;
+    const { _id, name, address, socket, dashboard, params } = req.body;
     const userId = req.userId;
     const dashboardId = req.params.dashboardId;
+
+    if (dashboard !== dashboardId)
+      return res.status(400).send({ error: "Dashboard IDs do not match" });
 
     createEditDeviceValidationSchema
       .validate({ name, address, socket, params })

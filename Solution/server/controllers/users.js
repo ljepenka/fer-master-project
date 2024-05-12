@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import express from "express";
 import Yup from "yup";
 import User from "../models/user.js";
+import Dashboard from "../models/dashboard.js";
 
 const router = express.Router();
 
@@ -38,7 +39,9 @@ export const editProfile = async (req, res) => {
       .then(async (validationData) => {
         const hashedPassword = await bcrypt.hash(validationData.password, 12);
         await User.findByIdAndUpdate(userId, { password: hashedPassword });
-        return res.status(201).json({ message: "Profile updated successfully" });
+        return res
+          .status(201)
+          .json({ message: "Profile updated successfully" });
       })
       .catch((errors) => res.status(400).json({ error: errors.message }));
   } catch (error) {
