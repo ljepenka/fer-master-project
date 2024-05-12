@@ -6,7 +6,6 @@ import { appTheme } from "../../App";
 
 const Device = ({ device }) => {
   const params = device.params;
-  console.log(device.socket);
   const socket = useMemo(() => new WebSocket(device.socket), [device.socket]);
   const [value, setValue] = useState({ value: null });
 
