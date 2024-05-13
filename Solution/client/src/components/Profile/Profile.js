@@ -34,15 +34,39 @@ const Profile = () => {
             width: "100%",
           }}
         >
-          <Box sx={{ display: "flex", gap: appTheme.spacing(2), alignItems: "center" }}>
-            <Avatar sx={{ width: appTheme.spacing(8), height: appTheme.spacing(8), backgroundColor: "secondary.main" }}>
-              <AccountCircle sx={{ width: appTheme.spacing(8), height: appTheme.spacing(8) }} />
+          <Box
+            sx={{
+              display: "flex",
+              gap: appTheme.spacing(2),
+              alignItems: "center",
+            }}
+          >
+            <Avatar
+              sx={{
+                width: appTheme.spacing(8),
+                height: appTheme.spacing(8),
+                backgroundColor: "secondary.main",
+              }}
+            >
+              <AccountCircle
+                sx={{ width: appTheme.spacing(8), height: appTheme.spacing(8) }}
+              />
             </Avatar>
             <Typography variant="h3">Profile</Typography>
           </Box>
-          <Box sx={{ display: "flex", gap: appTheme.spacing(2), alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: appTheme.spacing(2),
+              alignItems: "center",
+            }}
+          >
             <DialogButton
-              buttonSx={{ variant: "contained", sx: { height: "fit-content" }, children: "EDIT PROFILE" }}
+              buttonSx={{
+                variant: "contained",
+                sx: { height: "fit-content" },
+                children: "EDIT PROFILE",
+              }}
               title="Edit profile"
               titleSx={{ fontWeight: "bold" }}
             >
@@ -70,9 +94,17 @@ const Profile = () => {
             </DialogButton>
           </Box>
         </Box>
-        <Box sx={{ display: "flex", gap: appTheme.spacing(1), alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: appTheme.spacing(1),
+            alignItems: "center",
+          }}
+        >
           <Typography variant="p">EMAIL</Typography>
-          <Circle sx={{ width: appTheme.spacing(1), height: appTheme.spacing(1) }} />
+          <Circle
+            sx={{ width: appTheme.spacing(1), height: appTheme.spacing(1) }}
+          />
           <Typography component="p">{user?.email}</Typography>
         </Box>
       </Paper>

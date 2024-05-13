@@ -18,7 +18,9 @@ const initUserData = () => {
       return null;
     }
 
-    if (userProperties.every((property) => parsedUser.hasOwnProperty(property))) {
+    if (
+      userProperties.every((property) => parsedUser.hasOwnProperty(property))
+    ) {
       return parsedUser;
     } else {
       localStorage.removeItem("user");
@@ -37,7 +39,10 @@ export const useUserStore = create((set, get) => ({
       const result = await login(values);
       localStorage.setItem(
         "user",
-        JSON.stringify({ email: result.data.result.email, token: result.data.result.token })
+        JSON.stringify({
+          email: result.data.result.email,
+          token: result.data.result.token,
+        })
       );
       set({ user: result.data.result });
     } catch (error) {

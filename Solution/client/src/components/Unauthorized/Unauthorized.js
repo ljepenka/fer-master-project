@@ -37,7 +37,12 @@ function CircularProgressWithLabel(props) {
           {props.message}
         </Typography>
         <Box sx={{ position: "relative", display: "flex" }}>
-          <CircularProgress variant="determinate" size={100} {...props} value={props.value * 20} />
+          <CircularProgress
+            variant="determinate"
+            size={100}
+            {...props}
+            value={props.value * 20}
+          />
           <Box
             sx={{
               top: 0,
@@ -58,7 +63,10 @@ function CircularProgressWithLabel(props) {
             {"Redirecting to "}
             {props.redirectionpage && props.redirectto ? (
               <Link underline="none" onClick={() => navigate(props.redirectto)}>
-                <Typography display="inline" sx={{ textDecoration: "none" }}>{`${props.redirectionpage}`}</Typography>
+                <Typography
+                  display="inline"
+                  sx={{ textDecoration: "none" }}
+                >{`${props.redirectionpage}`}</Typography>
               </Link>
             ) : (
               <Link underline="none" onClick={() => navigate("/")}>
@@ -68,7 +76,11 @@ function CircularProgressWithLabel(props) {
               </Link>
             )}
             {" in"}
-            <Typography variant="span" sx={{ fontWeight: "bold" }} color="primary">
+            <Typography
+              variant="span"
+              sx={{ fontWeight: "bold" }}
+              color="primary"
+            >
               {` ${props.value}s.`}
             </Typography>
           </Typography>

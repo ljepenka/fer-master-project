@@ -47,7 +47,13 @@ const Navbar = () => {
   const { logoutUser } = useUserStore();
   const token = useUserStore((state) => state.user?.token);
   const { openNavbar, closeNavbar, open } = useNavbarStore();
-  const { dashboards, dashboardsError, dashboardsLoading, initDashboards, clearDashboards } = useDashboardStore();
+  const {
+    dashboards,
+    dashboardsError,
+    dashboardsLoading,
+    initDashboards,
+    clearDashboards,
+  } = useDashboardStore();
   const navigate = useNavigate();
   const fullScreen = useMediaQuery(appTheme.breakpoints.down("sm"));
   const userActions = [
@@ -113,32 +119,37 @@ const Navbar = () => {
                   <Box sx={{ flexGrow: 1 }}>
                     <ProgressOrDivider progress={dashboardsLoading} />
                     {dashboardsError && (
-                      <RepeatAction boxSx={{ padding: appTheme.spacing(1) }} onClick={initDashboards} />
+                      <RepeatAction
+                        boxSx={{ padding: appTheme.spacing(1) }}
+                        onClick={initDashboards}
+                      />
                     )}
                     {dashboards && (
                       <List>
-                        {Array.from(dashboards.entries()).map(([id, dashboard]) => (
-                          <Link
-                            key={id}
-                            onClick={() => {
-                              closeNavbar();
-                              navigate(`/dashboards/${id}`);
-                            }}
-                            underline="none"
-                          >
-                            <ListItem disablePadding>
-                              <ListItemButton
-                                sx={{
-                                  width: "100%",
-                                  display: "flex",
-                                  gap: appTheme.spacing(1),
-                                }}
-                              >
-                                <Typography>{dashboard.name}</Typography>
-                              </ListItemButton>
-                            </ListItem>
-                          </Link>
-                        ))}
+                        {Array.from(dashboards.entries()).map(
+                          ([id, dashboard]) => (
+                            <Link
+                              key={id}
+                              onClick={() => {
+                                closeNavbar();
+                                navigate(`/dashboards/${id}`);
+                              }}
+                              underline="none"
+                            >
+                              <ListItem disablePadding>
+                                <ListItemButton
+                                  sx={{
+                                    width: "100%",
+                                    display: "flex",
+                                    gap: appTheme.spacing(1),
+                                  }}
+                                >
+                                  <Typography>{dashboard.name}</Typography>
+                                </ListItemButton>
+                              </ListItem>
+                            </Link>
+                          )
+                        )}
                       </List>
                     )}
                   </Box>
@@ -154,7 +165,10 @@ const Navbar = () => {
                     <Divider />
                     <DialogButton
                       buttonSx={{
-                        sx: { margin: appTheme.spacing(1), sx: { height: "fit-content" } },
+                        sx: {
+                          margin: appTheme.spacing(1),
+                          sx: { height: "fit-content" },
+                        },
                         variant: "outlined",
                         color: "secondary",
                         startIcon: <Add />,
@@ -177,7 +191,10 @@ const Navbar = () => {
           <Box>
             {token ? (
               <>
-                <IconButton onClick={(event) => setAnchorEl(event.currentTarget)} sx={{ p: 0 }}>
+                <IconButton
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                  sx={{ p: 0 }}
+                >
                   <Avatar sx={{ backgroundColor: "secondary.main" }}>
                     <AccountCircle />
                   </Avatar>
@@ -216,7 +233,11 @@ const Navbar = () => {
                         onClick={() => setAnchorEl(null)}
                       >
                         {menuItem.icon ? menuItem.icon : null}
-                        <Typography variant="p" sx={{ textDecoration: "none" }} textAlign="center">
+                        <Typography
+                          variant="p"
+                          sx={{ textDecoration: "none" }}
+                          textAlign="center"
+                        >
                           {menuItem.title}
                         </Typography>
                       </MenuItem>
@@ -225,7 +246,11 @@ const Navbar = () => {
                 </Menu>
               </>
             ) : location.pathname === "/login" ? (
-              <IconButton color="inherit" sx={{ p: 0 }} onClick={() => navigate("/")}>
+              <IconButton
+                color="inherit"
+                sx={{ p: 0 }}
+                onClick={() => navigate("/")}
+              >
                 <Avatar sx={{ backgroundColor: appTheme.palette.primary.main }}>
                   <Home />
                 </Avatar>
@@ -233,7 +258,9 @@ const Navbar = () => {
             ) : (
               <>
                 <IconButton onClick={() => navigate("/login")} sx={{ p: 0 }}>
-                  <Avatar sx={{ backgroundColor: appTheme.palette.primary.main }}>
+                  <Avatar
+                    sx={{ backgroundColor: appTheme.palette.primary.main }}
+                  >
                     <VpnKey />
                   </Avatar>
                 </IconButton>

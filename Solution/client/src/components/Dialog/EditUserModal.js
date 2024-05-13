@@ -1,6 +1,12 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { DialogActions, DialogContent, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  DialogActions,
+  DialogContent,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -94,8 +100,13 @@ const EditUserModal = ({ dialogClose }) => {
             value={formik.values.repeatPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.repeatPassword && Boolean(formik.errors.repeatPassword)}
-            helperText={formik.touched.repeatPassword && formik.errors.repeatPassword}
+            error={
+              formik.touched.repeatPassword &&
+              Boolean(formik.errors.repeatPassword)
+            }
+            helperText={
+              formik.touched.repeatPassword && formik.errors.repeatPassword
+            }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -109,7 +120,13 @@ const EditUserModal = ({ dialogClose }) => {
         </form>
       </DialogContent>
       <DialogActions>
-        <LoadingButton loading={loading} onClick={dialogClose} fullWidth variant="outlined" color="primary">
+        <LoadingButton
+          loading={loading}
+          onClick={dialogClose}
+          fullWidth
+          variant="outlined"
+          color="primary"
+        >
           Cancel
         </LoadingButton>
         <LoadingButton

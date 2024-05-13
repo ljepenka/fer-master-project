@@ -1,19 +1,32 @@
-import { Box, Paper, Slider, Stack, Switch, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  Slider,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { useEffect, useMemo, useState } from "react";
 import { appTheme } from "../../App";
+import WarningIcon from "@mui/icons-material/Warning";
 
 const Device = ({ device }) => {
   const params = device.params;
   const socket = useMemo(() => new WebSocket(device.socket), [device.socket]);
   const [value, setValue] = useState({ value: null });
-  const [isReady, setIsReady] = useState(false);
+  const [socketState, setSocketState] = useState(socket.readyState);
+  const [isError, setIsError] = useState(false);
+
+  // add loading state?
 
   useEffect(() => {
     socket.onopen = () => {
       socket.send(JSON.stringify({ initial: 1 }));
-      setIsReady(true);
+      setSocketState(socket.readyState);
+      setIsError(false);
     };
 
     socket.onmessage = (event) => {
@@ -21,12 +34,19 @@ const Device = ({ device }) => {
       setValue(() => JSON.parse(event.data));
     };
 
+    socket.onclose = () => {
+      console.log("Connection closed to client");
+      setSocketState(socket.readyState);
+    };
+
     socket.onerror = () => {
-      setIsReady(false);
+      console.log("Error connecting to client");
+      setSocketState(socket.readyState);
     };
 
     return () => {
-      setIsReady(false);
+      setSocketState(socket.readyState);
+      setIsError(true);
       socket.close();
     };
   }, [socket]);
@@ -63,6 +83,18 @@ const Device = ({ device }) => {
     }
   }, [params.type]);
 
+  const socketStateToBool = (socketState) => {
+    if (
+      socketState === WebSocket.CLOSED ||
+      socketState === WebSocket.CLOSING ||
+      socketState === WebSocket.CONNECTING ||
+      isError
+    )
+      return false;
+
+    return true;
+  };
+
   const setDevice = (params) => {
     switch (params.type) {
       case 1:
@@ -72,7 +104,7 @@ const Device = ({ device }) => {
             <Switch
               checked={value.value}
               onChange={(e) => act(e.target.checked)}
-              disabled={!isReady}
+              disabled={!socketStateToBool(socketState)}
             />
             <Typography>{params.rightLabel}</Typography>
           </Stack>
@@ -90,7 +122,7 @@ const Device = ({ device }) => {
               valueLabelDisplay="auto"
               value={value.value}
               onChangeCommitted={(e, value) => act(value)}
-              disabled={!isReady}
+              disabled={!socketStateToBool(socketState)}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography>{params.min}</Typography>
@@ -109,7 +141,7 @@ const Device = ({ device }) => {
               endAngle={90}
               valueMin={params.valueMin}
               valueMax={params.valueMax}
-              disabled={!isReady}
+              disabled={!socketStateToBool(socketState)}
             />
             <Box sx={{ display: "flex" }}>
               <Typography sx={{ flex: 1, textAlign: "start" }}>
@@ -129,7 +161,7 @@ const Device = ({ device }) => {
 
   return (
     <>
-      {value.value !== null && isReady && (
+      {value.value !== null && (
         <Grid>
           <Paper
             sx={{
@@ -150,7 +182,13 @@ const Device = ({ device }) => {
                 gap: appTheme.spacing(1),
               }}
             >
-              <Typography variant="h5">{device.name}</Typography>
+              <Typography variant="h5">{device.name} </Typography>
+              {socketState !== WebSocket.OPEN && !isError && (
+                <CircularProgress size={25} />
+              )}
+              {isError && (
+                <WarningIcon sx={{ width: 25, height: 25 }} color="error" />
+              )}
             </Box>
             {setDevice(params)}
           </Paper>

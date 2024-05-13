@@ -1,6 +1,14 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Box, Container, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +57,11 @@ const Login = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: "100%", padding: appTheme.spacing(4) }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{ height: "100%", padding: appTheme.spacing(4) }}
+    >
       <Container sx={{ display: "flex", alignItems: "center", height: "100%" }}>
         <Container maxWidth="xs">
           <Paper
@@ -95,7 +107,9 @@ const Login = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.password && Boolean(formik.errors.password)}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
                 helperText={formik.touched.password && formik.errors.password}
                 InputProps={{
                   endAdornment: (
@@ -107,7 +121,13 @@ const Login = () => {
                   ),
                 }}
               />
-              <LoadingButton loading={loading} type="submit" fullWidth variant="contained" color="primary">
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
                 Login
               </LoadingButton>
             </form>
