@@ -20,7 +20,7 @@ const Device = ({ device }) => {
   const [socketState, setSocketState] = useState(socket.readyState);
   const [isError, setIsError] = useState(false);
 
-  // add loading state?
+  // add state for successful connection?
 
   useEffect(() => {
     socket.onopen = () => {
