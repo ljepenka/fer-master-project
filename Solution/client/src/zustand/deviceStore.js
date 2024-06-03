@@ -65,9 +65,12 @@ export const useDeviceStore = create((set, get) => ({
       set({ devicesLoading: true });
       const result = await editDevice(dashboardId, values);
       set((state) => {
-        const { _id, name, address } = result.data.result;
+        const device = result.data.result;
         const copy = Object.assign(state.devices);
-        copy.set(_id, { name, address });
+        copy.set(device._id, {
+          ...device,
+          params: JSON.parse(device.params),
+        });
         return { devicesError: false, devices: copy };
       });
     } catch (error) {

@@ -1,3 +1,5 @@
+import { Edit } from "@mui/icons-material";
+import WarningIcon from "@mui/icons-material/Warning";
 import {
   Box,
   CircularProgress,
@@ -11,7 +13,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { useEffect, useMemo, useState } from "react";
 import { appTheme } from "../../App";
-import WarningIcon from "@mui/icons-material/Warning";
+import AddEditDeviceModal from "../Dialog/AddEditDeviceModal";
+import DialogButton from "../Dialog/DialogButton";
 
 const Device = ({ device }) => {
   const params = device.params;
@@ -177,12 +180,31 @@ const Device = ({ device }) => {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
                 width: "100%",
                 padding: appTheme.spacing(1),
                 gap: appTheme.spacing(1),
               }}
             >
               <Typography variant="h5">{device.name} </Typography>
+              <DialogButton
+                buttonSx={{
+                  sx: { height: "fit-content" },
+                  variant: "contained",
+                  children: <Edit />,
+                }}
+                title="Edit device"
+                titleSx={{ fontWeight: "bold" }}
+                iconButton={true}
+                fullWidth={true}
+              >
+                <AddEditDeviceModal
+                  data={{
+                    dashboard: device.dashboard,
+                    data: { ...device, params: JSON.stringify(device.params) },
+                  }}
+                />
+              </DialogButton>
               {socketState !== WebSocket.OPEN && !isError && (
                 <CircularProgress size={25} />
               )}

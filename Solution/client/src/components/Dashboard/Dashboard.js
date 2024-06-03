@@ -113,10 +113,14 @@ const Dashboard = () => {
               sx={{ justifyContent: "space-around" }}
               container
               spacing={{ md: 4 }}
+              gap={4}
               columns={{ xs: 4, sm: 8, md: 12 }}
             >
               {Array.from(devices.entries()).map(([id, device]) => (
-                <Device key={id} device={device}></Device>
+                <Device
+                  key={id}
+                  device={{ ...device, dashboard: dashboardId, _id: id }}
+                ></Device>
               ))}
             </Grid>
           </Box>
